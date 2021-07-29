@@ -2,7 +2,7 @@ import * as yargs from 'yargs';
 
 import { allowedRequestHeaders, allowedResponseHeaders } from './headers';
 
-type Options = {
+export type Options = {
   fileName: string | undefined;
   port: number;
   corsOrigin: string | true;
@@ -11,6 +11,7 @@ type Options = {
   headers: { [key: string]: string };
   forwardHeaders: [string];
   returnHeaders: [string];
+  overrideFields: boolean;
 };
 
 function builder(cmd) {
@@ -87,6 +88,12 @@ function builder(cmd) {
         },
         default: allowedResponseHeaders,
       },
+      override: {
+        alias: 'or',
+        describe: 'Forces server to override existing field definitions',
+        type: 'boolean',
+        default: false,
+      },
     })
     .epilog(epilog)
     .strict();
@@ -106,6 +113,7 @@ export function parseCLI(commandCB: (options: Options) => void) {
       headers: argv.header || {},
       forwardHeaders: argv.forwardHeaders || [],
       returnHeaders: argv.returnHeaders || [],
+      overrideFields: argv.override,
     });
   }
 }
