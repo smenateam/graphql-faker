@@ -22,9 +22,15 @@ const log = console.log;
 
 parseCLI((options) => {
   const { extendURL, headers, forwardHeaders, returnHeaders } = options;
+  const customSchemasDir = './custom_schemas';
+  if (!fs.existsSync(customSchemasDir)) {
+    fs.mkdirSync(customSchemasDir);
+  }
   const fileName =
     options.fileName ||
-    (extendURL ? './schema_extension.faker.graphql' : './schema.faker.graphql');
+    (extendURL
+      ? `${customSchemasDir}/schema_extension.faker.graphql`
+      : `${customSchemasDir}/schema.faker.graphql`);
 
   if (!options.fileName) {
     log(
